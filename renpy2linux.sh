@@ -47,7 +47,7 @@ echo "==> Downloading and extracting RenPy SDK..."
 # Get the appropriate Ren'Py version SDK to supplement missing files.
 SDKFILE="renpy-${RENPYVER}-sdk.tar.bz2"
 SDKURL="http://renpy.org/dl/${RENPYVER}/${SDKFILE}"
-if ! wget -q "${SDKURL}"; then
+if ! wget -q --show-progress "${SDKURL}"; then
     echo "!! Ren'Py SDK Download failed -- aborting."
     exit 3
 fi

@@ -1,7 +1,8 @@
 renpy2linux
 ===========
 
-A script to convert Ren'Py releases to Windows, OSX ánd Linux-compatible ones.
+Forked from [renpy2linux](https://github.com/shizmob/renpy2linux).   
+A script to convert Ren'Py releases to Windows, OSX and Linux.
 
 Prerequisites
 -------------
