@@ -23,7 +23,7 @@ else
         exit 1
     fi
 
-    RENPYVER=$(grep 'version_tuple' renpy/__init__.py | head -1 | cut -d ' ' -f7,8,9 | sed 's/(//g' | sed 's/,/./g' | sed 's/ //g' | cut -d '.' -f1,2,3)
+    RENPYVER=$(grep 'version_tuple' renpy/__init__.py | head -1 | cut -d'=' -f2 | cut -d',' -f1,2,3 | sed 's/(//g' | sed 's/,/./g' | sed 's/ //g')
 fi
 echo "=> Ren'Py version: ${RENPYVER}"
 
