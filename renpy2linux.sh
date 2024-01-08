@@ -1,6 +1,17 @@
 #!/bin/sh
 set -e
 
+# Check if wget is available
+if ! [ -x "$(command -v wget)" ]; then
+  echo '!!Error: wget is not installed' >&2
+fi
+
+# Check if tar is available
+if ! [ -x "$(command -v tar)" ]; then
+  echo '!!Error: tar is not installed' >&2
+  exit 1
+fi
+
 if test $# -eq 0 ; then
   echo "usage: $0 <game> [renpy_version]"
   exit 1
@@ -11,9 +22,6 @@ BASEDIR=$(pwd)
 
 trap 'cd "$BASEDIR" && rm -rf __tmp' EXIT
 
-
-echo "==> Determining game information..."
-
 # Read Ren'Py version.
 if test $# -gt 1 ; then
     RENPYVER=$2
@@ -22,7 +30,6 @@ else
         echo "!! Could not read renpy/__init__.py -- is this a Ren'Py game?"
         exit 1
     fi
-
     RENPYVER=$(grep 'version_tuple' renpy/__init__.py | head -1 | cut -d'=' -f2 | cut -d',' -f1,2,3 | sed 's/(//g' | sed 's/,/./g' | sed 's/ //g')
 fi
 echo "=> Ren'Py version: ${RENPYVER}"
@@ -30,30 +37,28 @@ echo "=> Ren'Py version: ${RENPYVER}"
 # Extract game title.
 PYEXE=$(echo *.py)
 TITLE=${PYEXE%.py}
-echo "=> Game title: ${TITLE}"
 
 # Flush temporary directory.
 rm -rf __tmp
 mkdir __tmp
 cd __tmp
 
-echo "==> Downloading Ren'Py SDK..."
+echo "==> Downloading and extracting RenPy SDK..."
 # Get the appropriate Ren'Py version SDK to supplement missing files.
 SDKFILE="renpy-${RENPYVER}-sdk.tar.bz2"
 SDKURL="http://renpy.org/dl/${RENPYVER}/${SDKFILE}"
-if ! wget -nv "${SDKURL}"; then
-    echo "!! Download failed -- aborting."
+if ! wget -q "${SDKURL}"; then
+    echo "!! Ren'Py SDK Download failed -- aborting."
     exit 3
 fi
 
-echo "==> Extracting Ren'Py SDK..."
 if ! tar -xf "${SDKFILE}"; then
     echo "!! Extraction failed -- aborting."
     exit 4
 fi
 rm "${SDKFILE}"
 
-echo "==> Finding SDK directory..."
+# Finding directory
 for x in "renpy-${RENPYVER}-sdk" "renpy-${RENPYVER}" ; do
   if test -d "$x" ; then
     SDKDIR=$x
