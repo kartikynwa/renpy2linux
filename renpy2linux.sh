@@ -30,7 +30,7 @@ else
         echo "!! Could not read renpy/__init__.py -- is this a Ren'Py game?"
         exit 1
     fi
-    RENPYVER=$(grep 'version_tuple' renpy/__init__.py | head -1 | cut -d'=' -f2 | cut -d',' -f1,2,3 | sed 's/(//g' | sed 's/,/./g' | sed 's/ //g')
+    RENPYVER=$(grep 'version_tuple' renpy/__init__.py | head -1 | cut -d'=' -f2 | cut -d',' -f1,2,3 | sed 's/.*(//g' | sed 's/,/./g' | sed 's/ //g')
 fi
 echo "=> Ren'Py version: ${RENPYVER}"
 
